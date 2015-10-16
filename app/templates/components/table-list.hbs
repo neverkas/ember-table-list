@@ -1,0 +1,40 @@
+<div class="row">
+	<div class="input-field col s6">
+		{{input value=filterText class="validate" id="filter" length="60"}}
+		<label for="filter"><i class="fa fa-search"></i> Buscar proyecto</label>
+	</div>
+</div>
+
+<div class="row">
+	<table class="striped">
+		<thead>
+			<tr>
+			{{#each listColumnsTitle as |item|}}
+				<th>
+					{{item}} <i class="fa fa-sort-alpha-asc" {{action 'changeOrder' item}}></i>
+				</th>
+			{{/each}}
+			</tr>
+		</thead>
+
+		<tbody>
+		{{#if contentFilter}}
+			{{#each contentFilter as |content|}}
+					{{#table-list-item content=content columns=columns as |items|}}
+						{{#each items as |item|}}
+							<td>{{item}}</td>
+						{{/each}}
+					{{/table-list-item}}
+			{{/each}}
+		{{else}}
+			{{#if filterText}}
+			<tr>
+				<td colspan="{{unbound columnsCount}}">
+					No se encontraron resultados
+				</td>
+			</tr>
+			{{/if}}
+		{{/if}}
+		</tbody>
+	</table>
+</div>
