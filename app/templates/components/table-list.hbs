@@ -18,23 +18,17 @@
 		</thead>
 
 		<tbody>
-		{{#if contentFilter}}
-			{{#each contentFilter as |content|}}
-					{{#table-list-item content=content columns=columns as |items|}}
-						{{#each items as |item|}}
-							<td>{{item}}</td>
-						{{/each}}
-					{{/table-list-item}}
-			{{/each}}
+		{{#each contentFilter as |content|}}
+			{{table-list-item content=content columns=columns}}
 		{{else}}
 			{{#if filterText}}
-			<tr>
-				<td colspan="{{unbound columnsCount}}">
-					No se encontraron resultados
-				</td>
-			</tr>
+				<tr>
+					<td colspan="{{columnsCount}}">
+						No se encontraron resultados
+					</td>
+				</tr>
 			{{/if}}
-		{{/if}}
+		{{/each}}
 		</tbody>
 	</table>
 </div>
