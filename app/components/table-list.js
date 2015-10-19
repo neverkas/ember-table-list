@@ -1,12 +1,18 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-	model: null,
+	//model: null,
 	columns: null,
-	results: null,
+	controllerContent: Ember.Controller.create({ 
+		items: null,
+		sortProperties: ['titulo'],
+		sortAscending: true,
+	}),
 
-	actions:{
-		changeOrder: function(){
+	actions: {
+		test: function(item){
+			this.get('controllerContent').set('sortProperties', item);
+			this.get('controllerContent').toggleProperty('sortAscending');
 		}
 	},
 
@@ -36,33 +42,41 @@ export default Ember.Component.extend({
 	}.property('columns', 'filterText'),
 
 	contentFilter: function(){
-		var results;
+		var items = [];
 		var filtered = [];
 
-		if(this.get('results')){
-			results = this.get('results')
+		if(this.get('controllerContent') && this.get('controllerContent.items')){
+			items = this.get('controllerContent.items');
 		}
 
 		if(this.get('filterText') && this.get('filterText').length > 0){
 			var regex = new RegExp(this.get('filterText').toLowerCase());
 
-			filtered = results.filter(function(item){
+			filtered = items.filter(function(item){
 				return regex.test(item.get('label').toLowerCase());
 			});
 		}else{
-			filtered = results;
+			filtered = items;
 		}
 
 		return filtered;
 
-	}.property('filterText', 'results'),
+	}.property('filterText', 'controllerContent.items.[]', 'controllerContent.sortAscending', 'controllerContent.sortProperties'),
 
 	findContent: function(){
-		var _self 		= this;
-		var promise 	= this.store.findAll(this.model);			
+		var promise 			= this.store.findAll(this.modelName);			
+		var controllerContent 	= this.get('controllerContent');
 
-		promise.then(function(response){																								
-			_self.set('results', response)
+		promise.then(function(response){
+			controllerContent.set('items', response);
+			//controllerContent.set('content', response);
 		});
 	},
+
+	sortProperties: function() {
+		console.log("sortAscending: "+ this.get('controllerContent.sortAscending'));
+		console.log("sortProperties: "+ this.get('controllerContent.sortProperties'));
+
+		console.log(this.get('controllerContent'));
+	}.observes('controllerContent', 'controllerContent.sortAscending', 'controllerContent.sortProperties')
 });
