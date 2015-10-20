@@ -9,11 +9,13 @@
 	<table class="striped">
 		<thead>
 			<tr>
-			{{#each listColumnsTitle as |item|}}
+			{{#each listColumns as |item|}}
 				<th>
-					{{item}}
+					{{item.title}}
 
-					<span class="fa fa-sort-alpha-asc" {{action "test" item}}></span>
+					<span class="fa fa-sort-alpha-asc" {{action "sortAsc" item}}></span>
+
+					<span class="fa fa-sort-alpha-desc" {{action "sortDesc" item}}></span>
 
 				</th>
 			{{/each}}

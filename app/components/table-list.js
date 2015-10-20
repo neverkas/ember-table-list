@@ -1,34 +1,39 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-	//model: null,
 	columns: null,
-	controllerContent: Ember.Controller.create({ 
-		items: null,
-		sortProperties: ['titulo'],
-		sortAscending: true,
-	}),
+	controllerContent: null, 
 
-	actions: {
-		test: function(item){
-			this.get('controllerContent').set('sortProperties', item);
-			this.get('controllerContent').toggleProperty('sortAscending');
+	sorting: null,
+	content: Ember.computed.sort('controllerContent', 'sorting'),
+
+	actions: {		
+		sortAsc: function(item){
+			this.sortContent(item.data, 'asc');
+		},
+
+		sortDesc: function(item){
+			this.sortContent(item.data, 'desc');
 		}
+	},
+
+	sortContent: function(columName, columnOrder){
+		this.set('sorting', [columName + ':' + columnOrder]);
 	},
 
 	didInsertElement: function(){
 		this.findContent();
 	},
 
-	listColumnsTitle: function(){
+
+	listColumns: function(){
 		if(this.get('columns')){		
 			var columns = this.get('columns').split(" ");
 
 			return columns.map(function(item){
-				var columns 	= item.split(":");
-				var columnTitle = columns[0];
+				var column 	= item.split(":");
 
-				return columnTitle;
+				return {'title': column[0], 'data': column[1]};
 			});
 		}
 	}.property('columns'),
@@ -42,41 +47,28 @@ export default Ember.Component.extend({
 	}.property('columns', 'filterText'),
 
 	contentFilter: function(){
-		var items = [];
+		var content = [];
 		var filtered = [];
 
-		if(this.get('controllerContent') && this.get('controllerContent.items')){
-			items = this.get('controllerContent.items');
+		if(this.get('content')){
+			content = this.get('content');
 		}
 
 		if(this.get('filterText') && this.get('filterText').length > 0){
 			var regex = new RegExp(this.get('filterText').toLowerCase());
 
-			filtered = items.filter(function(item){
+			filtered = content.filter(function(item){
 				return regex.test(item.get('label').toLowerCase());
 			});
 		}else{
-			filtered = items;
+			filtered = content;
 		}
 
 		return filtered;
 
-	}.property('filterText', 'controllerContent.items.[]', 'controllerContent.sortAscending', 'controllerContent.sortProperties'),
+	}.property('filterText', 'content.[]'),
 
 	findContent: function(){
-		var promise 			= this.store.findAll(this.modelName);			
-		var controllerContent 	= this.get('controllerContent');
-
-		promise.then(function(response){
-			controllerContent.set('items', response);
-			//controllerContent.set('content', response);
-		});
+		this.set('controllerContent', this.get('store').findAll(this.get('modelName')));
 	},
-
-	sortProperties: function() {
-		console.log("sortAscending: "+ this.get('controllerContent.sortAscending'));
-		console.log("sortProperties: "+ this.get('controllerContent.sortProperties'));
-
-		console.log(this.get('controllerContent'));
-	}.observes('controllerContent', 'controllerContent.sortAscending', 'controllerContent.sortProperties')
 });
