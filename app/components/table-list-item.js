@@ -17,6 +17,7 @@ export default Ember.Component.extend({
 
 				return content.get(columnType);
 			});
+
 		}
 	}.property('content', 'columns'),
 });

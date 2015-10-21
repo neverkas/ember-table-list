@@ -6,6 +6,9 @@ module.exports = function(defaults) {
     // Add options here
   });
 
+  app.import("bower_components/jquery-highlight/jquery.highlight.js");
+  app.import("app/styles/app.css");
+
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //

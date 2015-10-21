@@ -25,7 +25,6 @@ export default Ember.Component.extend({
 		this.findContent();
 	},
 
-
 	listColumns: function(){
 		if(this.get('columns')){		
 			var columns = this.get('columns').split(" ");
@@ -71,4 +70,18 @@ export default Ember.Component.extend({
 	findContent: function(){
 		this.set('controllerContent', this.get('store').findAll(this.get('modelName')));
 	},
+
+	highlightText: function(){
+		//if(this.get('highlight') == true){		
+			var _self = this;
+			console.log(_self.get('filterText'));
+			
+			//Ember.run.next(function(){
+			// High Light Words
+				if(_self.get('filterText') && _self.get('filterText').length > 0){
+					$('td').highlight(_self.get('filterText'));
+				}
+			//});
+		//}
+	}.observes('filterText'),
 });

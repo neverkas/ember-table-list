@@ -1,39 +1,53 @@
 <div class="row">
 	<div class="input-field col s6">
 		{{input value=filterText class="validate" id="filter" length="60"}}
-		<label for="filter"><i class="fa fa-search"></i> Buscar proyecto</label>
+		<label for="filter"><i class="fa fa-search"></i> Search recipes</label>
 	</div>
 </div>
 
+
 <div class="row">
 	<table class="striped">
-		<thead>
-			<tr>
-			{{#each listColumns as |item|}}
-				<th>
-					{{item.title}}
+		<tr>
+		{{#each listColumns as |item|}}
+			<th>
+				{{item.title}}
 
-					<span class="fa fa-sort-alpha-asc" {{action "sortAsc" item}}></span>
-
-					<span class="fa fa-sort-alpha-desc" {{action "sortDesc" item}}></span>
-
-				</th>
-			{{/each}}
-			</tr>
-		</thead>
-
-		<tbody>
-		{{#each contentFilter as |content|}}
-			{{table-list-item content=content columns=columns}}
-		{{else}}
-			{{#if filterText}}
-				<tr>
-					<td colspan="{{columnsCount}}">
-						No se encontraron resultados
-					</td>
-				</tr>
-			{{/if}}
+				<span class="fa fa-sort-alpha-asc" {{action "sortAsc" item}}></span>
+				<span class="fa fa-sort-alpha-desc" {{action "sortDesc" item}}></span>
+			</th>
 		{{/each}}
-		</tbody>
+		</tr>
 	</table>
+	
+	{{#if controllerContent.isPending}}
+		<div class="center">
+		  <div class="preloader-wrapper big active">
+		    <div class="spinner-layer spinner-blue-only">
+		      <div class="circle-clipper left">
+		        <div class="circle"></div>
+		      </div>
+		    </div>
+		  </div>
+		 </div>
+	{{else}}
+		<table class="striped bordered">
+			<tbody>
+			{{#each contentFilter as |content|}}
+				{{table-list-item content=content columns=columns}}
+			{{else}}
+				{{#if filterText}}
+					<tr>
+						<td colspan="{{columnsCount}}">
+							No se encontraron resultados
+						</td>
+					</tr>
+				{{/if}}
+			{{/each}}
+			</tbody>
+		</table>
+	{{/if}}
+
 </div>
+
+{{yield}}
