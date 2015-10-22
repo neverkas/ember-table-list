@@ -17,12 +17,12 @@ export default Ember.Component.extend({
 		}
 	},
 
+	findContent: function(){
+		this.set('controllerContent', this.get('store').findAll(this.get('modelName')));
+	}.on("init"),
+	
 	sortContent: function(columName, columnOrder){
 		this.set('sorting', [columName + ':' + columnOrder]);
-	},
-
-	didInsertElement: function(){
-		this.findContent();
 	},
 
 	listColumns: function(){
@@ -67,16 +67,10 @@ export default Ember.Component.extend({
 
 	}.property('filterText', 'content.[]'),
 
-	findContent: function(){
-		this.set('controllerContent', this.get('store').findAll(this.get('modelName')));
-	},
-
 	highlightText: function(){
 		if(this.get('highlight') == true){		
-			//$("table").unhighlight();
-			// High Light Words
 			$('table').unhighlight();
-			
+
 			if(this.get('filterText') && this.get('filterText').length > 0){
 				$('td').highlight(this.get('filterText'));
 			}
