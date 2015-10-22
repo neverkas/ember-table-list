@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 	columns: null,
 	controllerContent: null, 
-
+	highlight: true,
 	sorting: null,
 	content: Ember.computed.sort('controllerContent', 'sorting'),
 
@@ -72,16 +72,14 @@ export default Ember.Component.extend({
 	},
 
 	highlightText: function(){
-		//if(this.get('highlight') == true){		
-			var _self = this;
-			console.log(_self.get('filterText'));
-			
-			//Ember.run.next(function(){
+		if(this.get('highlight') == true){		
+			//$("table").unhighlight();
 			// High Light Words
-				if(_self.get('filterText') && _self.get('filterText').length > 0){
-					$('td').highlight(_self.get('filterText'));
-				}
-			//});
-		//}
+			$('table').unhighlight();
+			
+			if(this.get('filterText') && this.get('filterText').length > 0){
+				$('td').highlight(this.get('filterText'));
+			}
+		}
 	}.observes('filterText'),
 });
