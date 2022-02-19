@@ -1,3 +1,4 @@
+# DEPRECATED
 # Ember Table List v1.0
 
 #### Create Adapter
